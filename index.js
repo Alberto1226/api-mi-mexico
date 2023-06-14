@@ -59,7 +59,7 @@ app.all("*", (req, res, next) => {
 
 app.get("/", (_req, res) => {
   return res.status(200).json({
-    mensaje: "API del Terminal Punto de Venta LA NENA, Propiedad de ISOTECH MÉXICO",
+    mensaje: "API del proyecto de cancun, Propiedad de ISOTECH MÉXICO",
   });
 });
 
