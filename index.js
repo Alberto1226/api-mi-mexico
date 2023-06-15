@@ -69,6 +69,7 @@ app.use(express.json());
 app.use(favicon(file));
 app.use(cors());
 
+
 // Routes
 app.use(require("./src/routes/login.routes"));
 app.use("/usuarios/", require("./src/routes/usuarios.routes"));
