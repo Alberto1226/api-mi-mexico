@@ -156,6 +156,27 @@ router.get("/obtenerUsuario/:id", async (req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 
+// Obtener un usuario en especifico
+router.get("/obtenerPorCorreo/:email", async (req, res) => {
+    const { email } = req.params;
+    console.log(email)
+    usuarios
+        .findOne({ email })
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
+// Actualizar datos del usuario
+router.put("/actualizarContrasena/:id", async (req, res) => {
+    const { id } = req.params;
+    const { contraseña } = req.body;
+
+    await usuarios
+        .updateOne({ _id: id }, { $set: { contraseña } })
+        .then((data) => res.status(200).json({ mensaje: "Contraseña actualizada" }))
+        .catch((error) => res.json({ message: error }));
+});
+
 // Borrar un usuario administrador
 router.delete("/eliminar/:id", async (req, res) => {
     const { id } = req.params;
@@ -178,16 +199,16 @@ router.put("/deshabilitar/:id", async (req, res) => {
 // Actualizar datos del usuario
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
-    const { nombre, usuario, password, admin, rol } = req.body;
+    const { nombre, usuario, contraseña, admin, rol } = req.body;
 
-     // Inicia validacion para no registrar usuarios con el mismo correo electronico
-     const busqueda = await usuarios.findOne({ usuario });
-     
+    // Inicia validacion para no registrar usuarios con el mismo correo electronico
+    const busqueda = await usuarios.findOne({ usuario });
+
     if (busqueda && busqueda.usuario === usuario && busqueda._id != id) {
         return res.status(401).json({ mensaje: "Usuario ya registrado" });
     } else {
         await usuarios
-            .updateOne({ _id: id }, { $set: { nombre, usuario, password, admin, rol } })
+            .updateOne({ _id: id }, { $set: { nombre, usuario, contraseña, admin, rol } })
             .then((data) => res.status(200).json({ mensaje: "Datos del usuario actualizados" }))
             .catch((error) => res.json({ message: error }));
     }
