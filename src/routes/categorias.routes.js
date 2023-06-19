@@ -1,33 +1,33 @@
 const express = require("express");
 const router = express.Router();
-const peliculas = require("../models/peliculas");
+const categorias = require("../models/categorias");
 
 // Registro de administradores
 router.post("/registro", async (req, res) => {
     const { titulo } = req.body;
 
-    // Inicia validacion para no registrar peliculas con el mismo correo electronico
-    const busqueda = await peliculas.findOne({ titulo });
+    // Inicia validacion para no registrar categorias con el mismo nombre
+    const busqueda = await categorias.findOne({ nombre });
 
     if (busqueda && busqueda.titulo === titulo) {
-        return res.status(401).json({ mensaje: "Pelicula ya registrado" });
+        return res.status(401).json({ mensaje: "Categoria ya registrado" });
     } else {
-        const peliculasRegistrar = peliculas(req.body);
-        await peliculasRegistrar
+        const categoriasRegistrar = categorias(req.body);
+        await categoriasRegistrar
             .save()
             .then((data) =>
                 res.status(200).json(
                     {
-                        mensaje: "Registro exitoso de la pelicula", datos: data
+                        mensaje: "Registro exitoso de la categoria", datos: data
                     }
                 ))
             .catch((error) => res.json({ message: error }));
     }
 });
 
-// Obtener todos las peliculas
+// Obtener todas las categorias
 router.get("/listar", async (req, res) => {
-    peliculas
+    categorias
         .find()
         .sort({ _id: -1 })
         .then((data) => res.json(data))
@@ -41,8 +41,8 @@ router.get("/listarPaginandoActivos", async (req, res) => {
 
     const skip = (pagina - 1) * limite;
 
-    await peliculas
-        .find({ tipo: "interno", estado: "true" })
+    await categorias
+        .find({ estado: "true" })
         .sort({ _id: -1 })
         .skip(skip)
         .limit(limite)
@@ -51,8 +51,8 @@ router.get("/listarPaginandoActivos", async (req, res) => {
 });
 
 // Obtener el total de las ventas activas
-router.get("/totalPeliculasActivas", async (_req, res) => {
-    await peliculas
+router.get("/totalCategoriasActivas", async (_req, res) => {
+    await categorias
         .find({ estado: "true" })
         .count()
         .sort({ _id: -1 })
@@ -67,7 +67,7 @@ router.get("/listarPaginandoCancelados", async (req, res) => {
 
     const skip = (pagina - 1) * limite;
 
-    await peliculas
+    await categorias
         .find({ estado: "false" })
         .sort({ _id: -1 })
         .skip(skip)
@@ -77,8 +77,8 @@ router.get("/listarPaginandoCancelados", async (req, res) => {
 });
 
 // Obtener el total de las ventas canceladas
-router.get("/totalPeliculasCancelados", async (_req, res) => {
-    await peliculas
+router.get("/totalCategoriasCancelados", async (_req, res) => {
+    await categorias
         .find({ estado: "false" })
         .count()
         .sort({ _id: -1 })
@@ -86,14 +86,14 @@ router.get("/totalPeliculasCancelados", async (_req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 
-// Listar paginando las peliculas
+// Listar paginando las categorias
 router.get("/listarPaginando", async (req, res) => {
     const { pagina, limite } = req.query;
     //console.log("Pagina ", pagina , " Limite ", limite)
 
     const skip = (pagina - 1) * limite;
 
-    await peliculas
+    await categorias
         .find()
         .sort({ _id: -1 })
         .skip(skip)
@@ -102,49 +102,49 @@ router.get("/listarPaginando", async (req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 
-// Obtener una pelicula en especifico
-router.get("/obtenerPelicula/:id", async (req, res) => {
+// Obtener una categoria en especifico
+router.get("/obtenerCategorias/:id", async (req, res) => {
     const { id } = req.params;
     //console.log("buscando")
-    peliculas
+    categorias
         .findById(id)
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
 });
 
-// Borrar una pelicula
+// Borrar una categoria
 router.delete("/eliminar/:id", async (req, res) => {
     const { id } = req.params;
-    peliculas
+    categorias
         .deleteOne({ _id: id })
-        .then((data) => res.status(200).json({ mensaje: "Pelicula eliminada" }))
+        .then((data) => res.status(200).json({ mensaje: "Categoria eliminada" }))
         .catch((error) => res.json({ message: error }));
 });
 
-// Cambiar estado la pelicula
+// Cambiar estado la categoria
 router.put("/deshabilitar/:id", async (req, res) => {
     const { id } = req.params;
     const { estado } = req.body;
-    peliculas
+    categorias
         .updateOne({ _id: id }, { $set: { estado } })
-        .then((data) => res.status(200).json({ mensaje: "Estado de la pelicula actualizado" }))
+        .then((data) => res.status(200).json({ mensaje: "Estado de la categoria actualizado" }))
         .catch((error) => res.json({ message: error }));
 });
 
-// Actualizar datos de la pelicula
+// Actualizar datos de la categoria
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
-    const { titulo, genero, actores, director, tipo, datosTemporada, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad } = req.body;
+    const { nombre, descripcion, estado } = req.body;
 
-    // Inicia validacion para no registrar peliculass con el mismo correo electronico
-    const busqueda = await peliculas.findOne({ titulo });
+    // Inicia validacion para no registrar categoias con el mismo correo electronico
+    const busqueda = await categorias.findOne({ nombre });
 
     if (busqueda && busqueda.titulo === titulo && busqueda._id != id) {
-        return res.status(401).json({ mensaje: "Pelicula ya registrada" });
+        return res.status(401).json({ mensaje: "Categoria ya registrada" });
     } else {
-        await peliculas
-            .updateOne({ _id: id }, { $set: { titulo, genero, actores, tipo, datosTemporada, director, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad } })
-            .then((data) => res.status(200).json({ mensaje: "Datos de la pelicula actualizados" }))
+        await categorias
+            .updateOne({ _id: id }, { $set: { nombre, descripcion, estado } })
+            .then((data) => res.status(200).json({ mensaje: "Datos de la categoria actualizados" }))
             .catch((error) => res.json({ message: error }));
     }
 });

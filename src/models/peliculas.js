@@ -8,15 +8,16 @@ const peliculas = new Schema({
     actores: { type: String },
     director: { type: String },
     duracion: { type: String },
+    tipo: { type: String },
     sinopsis: { type: String },
     calificacion: { type: String },
     año: { type: String },
     disponibilidad: { type: String },
-    masVisto: {type: String},
-    recomendado: {type: String},
-    urlVideo: {type: String},
-    urlPortada: {type: String},
-    seccion: {type: String},
+    masVisto: { type: String },
+    recomendado: { type: String },
+    urlVideo: { type: String },
+    urlPortada: { type: String },
+    seccion: { type: String },
     estado: { type: String }
 }, {
     timestamps: true
