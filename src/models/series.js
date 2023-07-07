@@ -17,6 +17,8 @@ const series = new Schema({
     header: { type: String },
     recomendado: { type: String },
     urlPortada: { type: String },
+    urlTrailer: { type: String },
+    contador: { type: String },
     seccion: { type: String },
     estado: { type: String }
 }, {

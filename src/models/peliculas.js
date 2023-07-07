@@ -16,6 +16,7 @@ const peliculas = new Schema({
     masVisto: { type: String },
     recomendado: { type: String },
     urlVideo: { type: String },
+    contador: { type: String },
     urlPortada: { type: String },
     seccion: { type: String },
     estado: { type: String }
