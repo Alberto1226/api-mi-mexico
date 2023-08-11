@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 // modelo de la coleccion usuarios
-const series = new Schema({
+const seriesEspeciales = new Schema({
     titulo: { type: String },
     categorias: { type: Array, default: [] },
     actores: { type: String },
@@ -21,8 +21,12 @@ const series = new Schema({
     contador: { type: String },
     seccion: { type: String },
     estado: { type: String },
+    urlPortada2: { type: String },
+    urlPortada3: { type: String },
+    urlPortada4: { type: String },
+    urlPortada5: { type: String },
 }, {
     timestamps: true
 });
 
-module.exports = mongoose.model("series", series, "series");
+module.exports = mongoose.model("seriesEspeciales", seriesEspeciales, "seriesEspeciales");
