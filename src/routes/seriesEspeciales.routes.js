@@ -164,6 +164,17 @@ router.put("/actualizar/:id", async (req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 
+// Obtener todos las series colaboradores
+router.get("/listarUltimosCincoEspeciales", async (req, res) => {
+    const { tipo } = req.query;
+    series
+        .find()
+        .sort({ createdAt: -1})
+        .limit(1)
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
 const destinationFolder = "/Users/josedavidayalafranco3/Documents/cancun/mi-mexico/src/assets/capitulos";
 
 const upload = multer({

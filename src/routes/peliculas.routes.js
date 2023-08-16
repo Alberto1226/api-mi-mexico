@@ -63,7 +63,7 @@ router.get("/listarPeliculasMasVistas", async (req, res) => {
 router.get("/listarUltimosCincoEspeciales", async (req, res) => {
     const { tipo } = req.query;
     peliculas
-        .find({ tipo: "especiales",  })
+        .find({ tipo: "especiales"  })
         .sort({ createdAt: -1})
         .limit(5)
         .then((data) => res.json(data))
