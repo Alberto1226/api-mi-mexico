@@ -25,6 +25,7 @@ const seriesEspeciales = new Schema({
     urlPortada3: { type: String },
     urlPortada4: { type: String },
     urlPortada5: { type: String },
+    patrocinador: {type: String},
 }, {
     timestamps: true
 });

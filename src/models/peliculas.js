@@ -19,7 +19,8 @@ const peliculas = new Schema({
     contador: { type: String },
     urlPortada: { type: String },
     seccion: { type: String },
-    estado: { type: String }
+    estado: { type: String },
+    patrocinador: {type: String},
 }, {
     timestamps: true
 });

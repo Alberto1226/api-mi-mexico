@@ -21,6 +21,7 @@ const series = new Schema({
     contador: { type: String },
     seccion: { type: String },
     estado: { type: String },
+    patrocinador: {type: String},
 }, {
     timestamps: true
 });
