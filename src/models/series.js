@@ -20,7 +20,8 @@ const series = new Schema({
     urlTrailer: { type: String },
     contador: { type: String },
     seccion: { type: String },
-    estado: { type: String }
+    estado: { type: String },
+    patrocinador: {type: String},
 }, {
     timestamps: true
 });

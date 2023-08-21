@@ -9,6 +9,7 @@ const usuarios = new Schema({
     contraseña: { type: String },
     historial: { type: Array, default: [] },
     estado: { type: String },
+    admin: { type: String },
     verificacion: { type: String },
 }, {
     timestamps: true
