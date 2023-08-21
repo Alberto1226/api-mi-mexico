@@ -21,6 +21,7 @@ const peliculas = new Schema({
     seccion: { type: String },
     estado: { type: String },
     patrocinador: {type: String},
+    patrocinadorPortada: {type: String},
 }, {
     timestamps: true
 });
