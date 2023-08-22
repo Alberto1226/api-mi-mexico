@@ -3,6 +3,7 @@ const router = express.Router();
 const series = require("../models/series");
 const multer = require("multer");
 const path = require("path");
+const { map } = require("lodash");
 
 // Registro de administradores
 router.post("/registro", async (req, res) => {
@@ -161,6 +162,28 @@ router.put("/actualizar/:id", async (req, res) => {
     await series
         .updateOne({ _id: id }, { $set: { titulo, genero, urlPortada, urlTrailer, actores, header, director, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad, patrocinador } })
         .then((data) => res.status(200).json({ mensaje: "Datos de la serie actualizados" }))
+        .catch((error) => res.json({ message: error }));
+});
+
+// Listar solo los productos vendidos en el día solicitado
+router.get("/listarDetallesCategoria", async (req, res) => {
+    //console.log(dia)
+    await series
+        .find()
+        .sort({ _id: -1 })
+        .then((data) => {
+            let dataTemp = []
+            //console.log(data)
+            map(data, (datos, indexPrincipal) => {
+                map(datos.categorias, (producto, index) => {
+                    const { categoria } = producto;
+                    console.log(categoria)
+                    dataTemp.push({ id: data[indexPrincipal]._id, titulo: data[indexPrincipal].titulo,  categoria: categoria, urlPortada: data[indexPrincipal].urlPortada, urlVideo: data[indexPrincipal].urlTrailer })
+                })
+
+            })
+            res.status(200).json(dataTemp)
+        })
         .catch((error) => res.json({ message: error }));
 });
 

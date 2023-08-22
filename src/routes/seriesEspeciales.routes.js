@@ -3,6 +3,8 @@ const router = express.Router();
 const series = require("../models/seriesEspeciales");
 const multer = require("multer");
 const path = require("path");
+const seriesEspeciales = require("../models/seriesEspeciales");
+const { map } = require("lodash");
 
 // Registro de administradores
 router.post("/registro", async (req, res) => {
@@ -172,6 +174,28 @@ router.get("/listarUltimosCincoEspeciales", async (req, res) => {
         .sort({ createdAt: -1})
         .limit(1)
         .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
+// Listar solo los productos vendidos en el día solicitado
+router.get("/listarDetallesCategoria", async (req, res) => {
+    //console.log(dia)
+    await seriesEspeciales
+        .find()
+        .sort({ _id: -1 })
+        .then((data) => {
+            let dataTemp = []
+            // console.log(data)
+            map(data, (datos, indexPrincipal) => {
+
+                map(datos.categorias, (producto, index) => {
+                    const { categoria } = producto;
+                    dataTemp.push({ id: data[indexPrincipal]._id, titulo: data[indexPrincipal].titulo,  categoria: categoria, urlPortada: data[indexPrincipal].urlPortada, urlVideo: data[indexPrincipal].urlTrailer })
+                })
+
+            })
+            res.status(200).json(dataTemp)
+        })
         .catch((error) => res.json({ message: error }));
 });
 
