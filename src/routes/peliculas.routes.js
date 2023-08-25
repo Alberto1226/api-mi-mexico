@@ -31,7 +31,7 @@ router.post("/registro", async (req, res) => {
 // Obtener todos las peliculas
 router.get("/listar", async (req, res) => {
     const { tipo } = req.query;
-    peliculas
+    await peliculas
         .find({ tipo })
         .sort({ _id: -1 })
         .then((data) => res.json(data))
@@ -41,7 +41,7 @@ router.get("/listar", async (req, res) => {
 // Obtener todos las series colaboradores
 router.get("/listarPeliculasMasVistas", async (req, res) => {
     const { tipo } = req.query;
-    peliculas
+    await peliculas
         .find({ tipo })
         .sort({ contador: -1 })
         .limit(10)
@@ -52,7 +52,7 @@ router.get("/listarPeliculasMasVistas", async (req, res) => {
 // Obtener todos las series colaboradores
 router.get("/listarPeliculasMasVistas", async (req, res) => {
     const { tipo } = req.query;
-    peliculas
+   await  peliculas
         .find({ tipo })
         .sort({ contador: -1 })
         .limit(10)
@@ -63,10 +63,21 @@ router.get("/listarPeliculasMasVistas", async (req, res) => {
 // Obtener todos las series colaboradores
 router.get("/listarUltimosCincoEspeciales", async (req, res) => {
     const { tipo } = req.query;
-    peliculas
+    await peliculas
         .find({ tipo: "especiales"  })
         .sort({ createdAt: -1})
         .limit(5)
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
+// Obtener todos las series colaboradores
+router.get("/listarUltimo", async (req, res) => {
+    const { tipo } = req.query;
+    await peliculas
+        .find({ tipo  })
+        .sort({ createdAt: -1})
+        .limit(1)
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
 });
@@ -143,7 +154,7 @@ router.get("/listarPaginando", async (req, res) => {
 router.get("/obtenerPelicula/:id", async (req, res) => {
     const { id } = req.params;
     //console.log("buscando")
-    peliculas
+    await peliculas
         .findById(id)
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
@@ -152,7 +163,7 @@ router.get("/obtenerPelicula/:id", async (req, res) => {
 // Borrar una pelicula
 router.delete("/eliminar/:id", async (req, res) => {
     const { id } = req.params;
-    peliculas
+    await peliculas
         .deleteOne({ _id: id })
         .then((data) => res.status(200).json({ mensaje: "Pelicula eliminada" }))
         .catch((error) => res.json({ message: error }));

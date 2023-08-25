@@ -3,7 +3,6 @@ const router = express.Router();
 const series = require("../models/seriesEspeciales");
 const multer = require("multer");
 const path = require("path");
-const seriesEspeciales = require("../models/seriesEspeciales");
 const { map } = require("lodash");
 
 // Registro de administradores
@@ -167,6 +166,16 @@ router.put("/actualizar/:id", async (req, res) => {
 });
 
 // Obtener todos las series colaboradores
+router.get("/listarUltimo", async (req, res) => {
+    await series
+        .find()
+        .sort({ createdAt: -1})
+        .limit(1)
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
+// Obtener todos las series colaboradores
 router.get("/listarUltimosCincoEspeciales", async (req, res) => {
     const { tipo } = req.query;
     series
@@ -180,7 +189,7 @@ router.get("/listarUltimosCincoEspeciales", async (req, res) => {
 // Listar solo los productos vendidos en el día solicitado
 router.get("/listarDetallesCategoria", async (req, res) => {
     //console.log(dia)
-    await seriesEspeciales
+    await series
         .find()
         .sort({ _id: -1 })
         .then((data) => {
