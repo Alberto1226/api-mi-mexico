@@ -10,7 +10,9 @@ const patrocinadores = new Schema({
     urlInstagram: { type: String },
     urlTwitter: { type: String },
     nivel: { type: String },
-    estado: { type: String }
+    estado: { type: String },
+    numeroApariciones: { type: String },
+    prioridadAparicion: { type: String }
 }, {
     timestamps: true
 });
