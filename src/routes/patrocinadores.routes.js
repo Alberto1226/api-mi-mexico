@@ -34,6 +34,16 @@ router.get("/listar", async (req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 
+// Obtener todas los patrocionadores
+router.get("/listarPorPrioridad", async (req, res) => {
+    const { prioridadAparicion } = req.query;
+    patrocinadores
+        .find({ prioridadAparicion })
+        .sort({ _id: -1 })
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
 // Obtener las ventas activas con paginacion
 router.get("/listarPaginandoActivos", async (req, res) => {
     const { pagina, limite } = req.query;
