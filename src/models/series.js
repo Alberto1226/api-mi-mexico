@@ -23,6 +23,7 @@ const series = new Schema({
     estado: { type: String },
     patrocinador: {type: String},
     patrocinadorPortada: {type: String},
+    urlPortadaMovil: { type: String },
 }, {
     timestamps: true
 });

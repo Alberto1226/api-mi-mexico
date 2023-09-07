@@ -27,6 +27,11 @@ const seriesEspeciales = new Schema({
     urlPortada5: { type: String },
     patrocinador: {type: String},
     patrocinadorPortada: {type: String},
+    urlPortadaMovil: { type: String },
+    urlPortadaMovil2: { type: String },
+    urlPortadaMovil3: { type: String },
+    urlPortadaMovil4: { type: String },
+    urlPortadaMovil5: { type: String },
 }, {
     timestamps: true
 });

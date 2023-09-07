@@ -11,6 +11,7 @@ const capitulosSeries = new Schema({
     duracion: { type: String },
     descripcion: { type: String },
     estado: { type: String },
+    urlPortadaMovil: { type: String },
 }, {
     timestamps: true
 });

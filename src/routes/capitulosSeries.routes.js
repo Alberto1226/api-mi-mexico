@@ -127,10 +127,10 @@ router.put("/deshabilitar/:id", async (req, res) => {
 // Actualizar datos de la capitulo
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
-    const { nombre, urlCapitulo, urlPortada, duracion, descripcion } = req.body;
+    const { nombre, urlCapitulo, urlPortada, duracion, descripcion, urlPortadaMovil } = req.body;
 
     await capitulosSeries
-        .updateOne({ _id: id }, { $set: { nombre, urlCapitulo, urlPortada, duracion, descripcion } })
+        .updateOne({ _id: id }, { $set: { nombre, urlCapitulo, urlPortada, duracion, descripcion, urlPortadaMovil } })
         .then((data) => res.status(200).json({ mensaje: "Datos del capitulo actualizados" }))
         .catch((error) => res.json({ message: error }));
 });
