@@ -214,7 +214,7 @@ router.get("/listarDetallesCategoria", async (req, res) => {
 
                 map(datos.categorias, (producto, index) => {
                     const { categoria } = producto;
-                    dataTemp.push({ id: data[indexPrincipal]._id, titulo: data[indexPrincipal].titulo,  categoria: categoria, urlPortada: data[indexPrincipal].urlPortada, urlVideo: data[indexPrincipal].urlVideo })
+                    dataTemp.push({ id: data[indexPrincipal]._id, titulo: data[indexPrincipal].titulo,  categoria: categoria, urlPortada: data[indexPrincipal].urlPortada, urlVideo: data[indexPrincipal].urlVideo, urlPortadaMovil: data[indexPrincipal].urlPortadaMovil })
                 })
 
             })
