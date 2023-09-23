@@ -12,6 +12,7 @@ const capitulosSeries = new Schema({
     descripcion: { type: String },
     estado: { type: String },
     urlPortadaMovil: { type: String },
+    contador: { type: String },
 }, {
     timestamps: true
 });

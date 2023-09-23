@@ -135,4 +135,14 @@ router.put("/actualizar/:id", async (req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 
+// Actualizar datos de la serie
+router.put("/actualizarContador/:id", async (req, res) => {
+    const { id } = req.params;
+    const { contador } = req.body;
+
+    await series
+        .updateOne({ _id: id }, { $set: { contador } })
+        .then((data) => res.status(200).json({ mensaje: "Datos de la serie actualizados" }))
+        .catch((error) => res.json({ message: error }));
+});
 module.exports = router;

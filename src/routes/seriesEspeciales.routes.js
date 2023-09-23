@@ -186,6 +186,17 @@ router.get("/listarUltimosCincoEspeciales", async (req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 
+// Obtener todos las series colaboradores
+router.get("/listarPrimerosCincoEspeciales", async (req, res) => {
+    const { tipo } = req.query;
+    series
+        .find()
+        .sort({ createdAt: 1})
+        .limit(1)
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
 // Listar solo los productos vendidos en el día solicitado
 router.get("/listarDetallesCategoria", async (req, res) => {
     //console.log(dia)
