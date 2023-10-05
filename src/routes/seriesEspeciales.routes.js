@@ -170,7 +170,7 @@ router.get("/listarUltimo", async (req, res) => {
     await series
         .find()
         .sort({ createdAt: -1})
-        .limit(1)
+        .limit(2)
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
 });
