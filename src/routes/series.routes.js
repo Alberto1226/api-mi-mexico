@@ -37,6 +37,16 @@ router.get("/listar", async (req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 
+router.get("/listarUltimosVeinte", async (req, res) => {
+    series
+        .find()
+        .sort({ _id: -1 })
+        .limit(20)  // Limitar a los últimos 20 registros
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
+
 // Obtener todos las series colaboradores
 router.get("/listarSeriesMasVistas", async (req, res) => {
     series

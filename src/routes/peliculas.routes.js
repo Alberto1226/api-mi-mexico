@@ -38,6 +38,17 @@ router.get("/listar", async (req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 
+router.get("/listarUltimosCinco", async (req, res) => {
+    const { tipo } = req.query;
+    await peliculas
+        .find({ tipo })
+        .sort({ _id: -1 })
+        .limit(5)  // Limitar a los últimos 20 registros
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
+
 // Obtener todos las series colaboradores
 router.get("/listarPeliculasMasVistas", async (req, res) => {
     const { tipo } = req.query;
@@ -52,7 +63,7 @@ router.get("/listarPeliculasMasVistas", async (req, res) => {
 // Obtener todos las series colaboradores
 router.get("/listarPeliculasMasVistas", async (req, res) => {
     const { tipo } = req.query;
-   await  peliculas
+    await peliculas
         .find({ tipo })
         .sort({ contador: -1 })
         .limit(10)
@@ -64,8 +75,8 @@ router.get("/listarPeliculasMasVistas", async (req, res) => {
 router.get("/listarUltimosCincoEspeciales", async (req, res) => {
     const { tipo } = req.query;
     await peliculas
-        .find({ tipo: "especiales"  })
-        .sort({ createdAt: -1})
+        .find({ tipo: "especiales" })
+        .sort({ createdAt: -1 })
         .limit(5)
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
@@ -75,8 +86,8 @@ router.get("/listarUltimosCincoEspeciales", async (req, res) => {
 router.get("/listarUltimo", async (req, res) => {
     const { tipo } = req.query;
     await peliculas
-        .find({ tipo  })
-        .sort({ createdAt: -1})
+        .find({ tipo })
+        .sort({ createdAt: -1 })
         .limit(1)
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
@@ -205,7 +216,7 @@ router.put("/actualizar/:id", async (req, res) => {
 router.get("/listarDetallesCategoria", async (req, res) => {
     const { tipo } = req.query;
     await peliculas
-        .find({tipo})
+        .find({ tipo })
         .sort({ _id: -1 })
         .then((data) => {
             let dataTemp = []
@@ -214,7 +225,7 @@ router.get("/listarDetallesCategoria", async (req, res) => {
 
                 map(datos.categorias, (producto, index) => {
                     const { categoria } = producto;
-                    dataTemp.push({ id: data[indexPrincipal]._id, titulo: data[indexPrincipal].titulo,  categoria: categoria, urlPortada: data[indexPrincipal].urlPortada, urlVideo: data[indexPrincipal].urlVideo, urlPortadaMovil: data[indexPrincipal].urlPortadaMovil })
+                    dataTemp.push({ id: data[indexPrincipal]._id, titulo: data[indexPrincipal].titulo, categoria: categoria, urlPortada: data[indexPrincipal].urlPortada, urlVideo: data[indexPrincipal].urlVideo, urlPortadaMovil: data[indexPrincipal].urlPortadaMovil })
                 })
 
             })
