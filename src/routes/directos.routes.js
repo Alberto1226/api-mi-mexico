@@ -58,9 +58,10 @@ router.put("/deshabilitar/:id", async (req, res) => {
 // Actualizar datos del directo
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
+    const { codigo, status } = req.body;
 
         await directos
-            .updateOne({ _id: id }, { $set: { codigo } })
+            .updateOne({ _id: id }, { $set: { codigo, status } })
             .then((data) => res.status(200).json({ mensaje: "Datos del directo actualizados" }))
             .catch((error) => res.json({ message: error }));
 });
