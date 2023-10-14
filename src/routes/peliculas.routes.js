@@ -55,7 +55,7 @@ router.get("/listarPeliculasMasVistas", async (req, res) => {
     await peliculas
         .find({ tipo })
         .sort({ contador: -1 })
-        .limit(10)
+        .limit(5)
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
 });
@@ -66,7 +66,7 @@ router.get("/listarPeliculasMasVistas", async (req, res) => {
     await peliculas
         .find({ tipo })
         .sort({ contador: -1 })
-        .limit(10)
+        .limit(5)
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
 });
