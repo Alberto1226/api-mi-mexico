@@ -30,9 +30,9 @@ router.post("/registro", async (req, res) => {
         });
 
         const mailOptions = {
-            from: "HERFRAN <mxtvmasinfo@gmail.com>",
+            from: "miMéxicoTV <mxtvmasinfo@gmail.com>",
             to: email,
-            subject: "CUENTA EN MXTVMAS CREADA CON EXITO" + "\n" + "¡Bienvenido(a) a nuestro sitio web!" + "\n" + "Nos alegra tenerte como parte de nuestra comunidad. Gracias por registrarte y unirte a nosotros. Estamos emocionados de compartir contigo todo lo que nuestro sitio tiene para ofrecer." + "\n" + "Nuestro objetivo es brindarte la mejor experiencia posible." + "\n" + "Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos. Estamos aquí para ayudarte." + "\n" + "Gracias nuevamente por unirte a nosotros. ¡Esperamos que disfrutes de tu tiempo en nuestro sitio!" + "\n" + "Atentamente," + "\n" + "El equipo de MXTVMAS"
+            subject: "CUENTA EN miMéxicoTV CREADA CON EXITO" + "\n" + "¡Bienvenido(a) a nuestro sitio web!" + "\n" + "Nos alegra tenerte como parte de nuestra comunidad. Gracias por registrarte y unirte a nosotros. Estamos emocionados de compartir contigo todo lo que nuestro sitio tiene para ofrecer." + "\n" + "Nuestro objetivo es brindarte la mejor experiencia posible." + "\n" + "Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos. Estamos aquí para ayudarte." + "\n" + "Gracias nuevamente por unirte a nosotros. ¡Esperamos que disfrutes de tu tiempo en nuestro sitio!" + "\n" + "Atentamente," + "\n" + "El equipo de miMéxicoTV"
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
