@@ -3,55 +3,51 @@ const nodeMailer = require("nodemailer");
 const router = express.Router();
 const usuarios = require("../models/usuarios");
 
-// Registro de administradores
+
 router.post("/registro", async (req, res) => {
-    const { email } = req.body;
+    try {
+        const { email } = req.body;
 
-    // Inicia validacion para no registrar usuarios con el mismo correo electronico
-    const busqueda = await usuarios.findOne({ email });
-
-    if (busqueda && busqueda.email === email) {
-        return res.status(401).json({ mensaje: "Ya existe un usuario con este correo" });
-    } else {
-        const usuarioRegistrar = usuarios(req.body);
-        await usuarioRegistrar
-            .save()
-            .then((data) =>
-                res.status(200).json(
-                    {
-                        mensaje: "Registro exitoso del usuario", datos: data
-                    }
-                ))
-            .catch((error) => res.json({ message: error }));
-    }
-
-    const transporter = nodeMailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-            user: "mxtvmasinfo@gmail.com",
-            pass: "edqggruseowfqemc",
-        },
-    });
-
-    const mailOptions = {
-        from: "MXTVMAS <mxtvmasinfo@gmail.com>",
-        to: email,
-        subject: "CUENTA EN MXTVMAS CREADA CON EXITO" + "\n" + "¡Bienvenido(a) a nuestro sitio web!" + "\n" + "Nos alegra tenerte como parte de nuestra comunidad. Gracias por registrarte y unirte a nosotros. Estamos emocionados de compartir contigo todo lo que nuestro sitio tiene para ofrecer." + "\n" + "Nuestro objetivo es brindarte la mejor experiencia posible." + "\n" + "Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos. Estamos aquí para ayudarte." + "\n" + "Gracias nuevamente por unirte a nosotros. ¡Esperamos que disfrutes de tu tiempo en nuestro sitio!" + "\n" + "Atentamente," + "\n" + "El equipo de MXTVMAS"
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
+        // Verificar si el usuario ya existe
+        const busqueda = await usuarios.findOne({ email });
+        if (busqueda && busqueda.email === email) {
+            return res.status(401).json({ mensaje: "Ya existe un usuario con este correo" });
         }
-        console.log("Message sent: %s", info.messageId);
-        console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
-    });
 
-    return res.status(200).json({
-        message: "El estado de cuenta fue enviado a su correo",
-    });
+        // Crear y guardar el usuario en la base de datos
+        const usuarioRegistrar = usuarios(req.body);
+        const data = await usuarioRegistrar.save();
+
+        // Enviar correo solo si el registro es exitoso
+        const transporter = nodeMailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false,
+            auth: {
+                user: "mxtvmasinfo@gmail.com",
+                pass: "edqggruseowfqemc",
+            },
+        });
+
+        const mailOptions = {
+            from: "HERFRAN <mxtvmasinfo@gmail.com>",
+            to: email,
+            subject: "CUENTA EN MXTVMAS CREADA CON EXITO" + "\n" + "¡Bienvenido(a) a nuestro sitio web!" + "\n" + "Nos alegra tenerte como parte de nuestra comunidad. Gracias por registrarte y unirte a nosotros. Estamos emocionados de compartir contigo todo lo que nuestro sitio tiene para ofrecer." + "\n" + "Nuestro objetivo es brindarte la mejor experiencia posible." + "\n" + "Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos. Estamos aquí para ayudarte." + "\n" + "Gracias nuevamente por unirte a nosotros. ¡Esperamos que disfrutes de tu tiempo en nuestro sitio!" + "\n" + "Atentamente," + "\n" + "El equipo de MXTVMAS"
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return res.status(500).json({ mensaje: "Error al enviar el correo", error: error.message });
+            }
+            console.log("Message sent: %s", info.messageId);
+            console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
+
+            // Responder solo después de que el correo se haya enviado con éxito
+            return res.status(200).json({ mensaje: "Registro exitoso del usuario", datos: data });
+        });
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al registrar el usuario", error: error.message });
+    }
 });
 
 // Obtener todos los usuarios colaboradores
