@@ -4,6 +4,131 @@ const peliculas = require("../models/peliculas");
 const multer = require("multer");
 const path = require("path");
 const { map } = require("lodash");
+const axios = require('axios');
+const fs = require('fs');
+const tus = require('tus-js-client');
+
+const apiToken = 'BTzRk131MuwEQC879I1ZY4mI62IwiQzmXVNYuEvT'; // Token de API
+const acounid ='476c92bc94b52dc51a8b504fb0a48185';
+// Configura multer para almacenar el archivo en memoria
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+function uploadFileToCloudflare(fileBuffer, fileName, fileSize, accountId, apiToken) {
+    return new Promise((resolve, reject) => {
+        const options = {
+            endpoint: `https://api.cloudflare.com/client/v4/accounts/${accountId}/stream`,
+            headers: {
+                Authorization: `Bearer ${apiToken}`,
+            },
+            chunkSize: 50 * 1024 * 1024, // Tamaño del chunk de 50MB
+            retryDelays: [0, 3000, 5000, 10000, 20000],
+            metadata: {
+                name: fileName, // Nombre del archivo
+                filetype: "video/mp4",
+            },
+            uploadSize: fileSize,
+            onError: function (error) {
+                reject(error);
+            },
+            onProgress: function (bytesUploaded, bytesTotal) {
+                const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+                console.log(`Progreso: ${percentage}% (${bytesUploaded}/${bytesTotal} bytes)`);
+            },
+            onSuccess: function () {
+                console.log("Carga finalizada con éxito");
+            },
+            onAfterResponse: function (req, res) {
+                const mediaIdHeader = res.getHeader("stream-media-id");
+                if (mediaIdHeader) {
+                    console.log("ID del media cargado:", mediaIdHeader);
+                    resolve(mediaIdHeader);
+                } else {
+                    resolve(null);
+                }
+            },
+        };
+
+        const upload = new tus.Upload(fileBuffer, options);
+        upload.start();
+    });
+}
+
+
+
+
+router.post('/hola', upload.single('file'), async (req, res) => {
+    console.log("Request received: /hola");
+
+    if (!req.file) {
+        return res.status(400).json({ message: 'No se ha enviado ningún archivo.' });
+    }
+
+    try {
+        const fileBuffer = req.file.buffer; // Buffer del archivo
+        const fileName = req.file.originalname; // Nombre del archivo
+        const fileSize = req.file.size; // Tamaño del archivo
+
+        console.log("Subiendo archivo a Cloudflare Stream...");
+        const vid = await uploadFileToCloudflare(fileBuffer, fileName, fileSize, acounid, apiToken);
+
+        console.log("Archivo subido exitosamente.");
+        res.status(200).json({ message: 'Archivo subido exitosamente.', url: vid, bien: "bien" });
+    } catch (err) {
+        console.error("Error en la carga:", err); // Logging detallado del error
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
+
+// Ruta para subir el video
+// Ruta para subir el video
+router.post('/uploadVideo', upload.single('video'), async (req, res) => {
+    console.log("Request body:", req.body); // Muestra el contenido del cuerpo de la solicitud
+    console.log("Request file:", req.file); // Muestra información sobre el archivo subido
+    
+    if (!req.file) {
+      return res.status(400).json({ message: 'Por favor, selecciona un archivo de video.' });
+    }
+  
+    try {
+      // Solicita una URL de carga directa con los parámetros necesarios
+      console.log("Solicitando URL de carga directa...");
+      
+      const presignedUrlResponse = await axios.post(
+        'https://api.cloudflare.com/client/v4/accounts/476c92bc94b52dc51a8b504fb0a48185/stream/direct_upload',
+        {
+          maxDurationSeconds: 3600, // Duración máxima permitida en segundos
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      const { uploadURL } = presignedUrlResponse.data.result;
+      console.log("Presigned URL obtenida:", uploadURL); // Muestra la URL de carga obtenida
+  
+      // Sube el archivo directamente a la URL obtenida desde la memoria
+      console.log("Subiendo archivo...");
+      await axios.put(uploadURL, req.file.buffer, {
+        headers: {
+          'Content-Type': req.file.mimetype,
+        },
+      });
+  
+      console.log("Archivo subido exitosamente.");
+  
+      res.status(200).json({ message: 'Archivo subido exitosamente.' });
+    } catch (err) {
+      console.error("Error en la carga:", err); // Muestra el error completo
+      res.status(500).json({ message: err.response ? err.response.data : err.message });
+    }
+  });
+  
 
 // Registro de administradores
 router.post("/registro", async (req, res) => {
@@ -236,18 +361,7 @@ router.get("/listarDetallesCategoria", async (req, res) => {
 
 const destinationFolder = "/Users/josedavidayalafranco3/Documents/cancun/mi-mexico/src/assets/videos";
 
-const upload = multer({
-    dest: destinationFolder,
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, destinationFolder);
-        },
-        filename: (req, file, cb) => {
-            const ext = path.extname(file.originalname);
-            cb(null, `video-${Date.now()}${ext}`);
-        },
-    }),
-});
+
 
 router.post('/upload', upload.single('video'), (req, res) => {
     const videoPath = req.file.path;
