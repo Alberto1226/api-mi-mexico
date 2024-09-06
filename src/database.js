@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // Credenciales para conexion local a la BD
-// const URI = "mongodb://127.0.0.1/TPV-LA-NENA-PRUEBAS";
+// const URI = "mongodb://127.0.0.1/miMexico";
 
 // Credenciales para conexion a Mongo Atlas
 const URI = "mongodb+srv://tpv-la-nena:74CDFTgpyW5783eh@cluster0.dsbmu.mongodb.net/miMexico"; // tpv test

@@ -168,9 +168,9 @@ router.put("/actualizarContador/:id", async (req, res) => {
 // Actualizar datos de la serie
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
-    const { titulo, genero, actores, urlPortada, urlTrailer, director, duracion, header, sinopsis, calificacion, datos, temporada, año, disponibilidad, patrocinador, patrocinadorPortada, urlPortadaMovil } = req.body;
+    const { titulo, genero, actores, urlPortada, urlTrailer, director, duracion, header, sinopsis, calificacion, datos, datosTemporada, año, disponibilidad, patrocinador, patrocinadorPortada, urlPortadaMovil } = req.body;
     await series
-        .updateOne({ _id: id }, { $set: { titulo, genero, urlPortada, urlTrailer, actores, header, director, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad, patrocinador, patrocinadorPortada, urlPortadaMovil } })
+        .updateOne({ _id: id }, { $set: { titulo, genero, urlPortada, urlTrailer, actores, header, director, duracion, sinopsis, calificacion, datos, datosTemporada, año, disponibilidad, patrocinador, patrocinadorPortada, urlPortadaMovil } })
         .then((data) => res.status(200).json({ mensaje: "Datos de la serie actualizados" }))
         .catch((error) => res.json({ message: error }));
 });
